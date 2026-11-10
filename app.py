@@ -145,7 +145,34 @@ if not df.empty:
         df,
         use_container_width=True
     )
+# ==========================
+# ELIMINA MOVIMENTO
+# ==========================
 
+st.subheader("🗑️ Elimina movimento")
+
+movimento_da_eliminare = st.selectbox(
+    "Seleziona il movimento",
+    df.index,
+    format_func=lambda i: (
+        f"{df.loc[i, 'date']} | "
+        f"{df.loc[i, 'type']} | "
+        f"{df.loc[i, 'category']} | "
+        f"€ {df.loc[i, 'amount']}"
+    )
+)
+
+if st.button("🗑️ Elimina selezionato"):
+
+    # +2 perché Google Sheets parte da riga 1
+    # e la prima riga contiene le intestazioni
+    numero_riga_sheet = movimento_da_eliminare + 2
+
+    sheet.delete_rows(numero_riga_sheet)
+
+    st.success("Movimento eliminato!")
+
+    st.rerun()
     # ==========================
     # ENTRATE VS USCITE
     # ==========================
