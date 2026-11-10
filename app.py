@@ -5,13 +5,17 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import date
 
+# ==========================
+# CONFIG
+# ==========================
+
 st.set_page_config(
     page_title="Gestione Finanze",
     layout="wide"
 )
 
 # ==========================
-# GOOGLE SHEETS CONNECTION
+# GOOGLE SHEETS
 # ==========================
 
 scope = [
@@ -38,19 +42,20 @@ settings_sheet = file.worksheet("Impostazioni")
 # ==========================
 
 data = sheet.get_all_records()
-
-df = pd.DataFrame(data)
 settings_data = settings_sheet.get_all_records()
 
+df = pd.DataFrame(data)
 settings_df = pd.DataFrame(settings_data)
-if not df.empty:
-    df.columns = df.columns.str.lower()
+
+# ==========================
+# TITLE
+# ==========================
+
+st.title("💰 Gestione Finanze")
 
 # ==========================
 # FORM NUOVO MOVIMENTO
 # ==========================
-
-st.title("💰 Gestione Finanze")
 
 with st.expander("➕ Aggiungi movimento"):
 
@@ -121,29 +126,35 @@ with st.expander("➕ Aggiungi movimento"):
 
 if not df.empty:
 
+    df.columns = df.columns.str.lower()
     df["amount"] = pd.to_numeric(df["amount"])
-patrimonio_iniziale = float(
-    settings_df.loc[
-        settings_df["chiave"] == "patrimonio_iniziale",
-        "valore"
-    ].iloc[0]
-)
 
-obiettivo_capitale = float(
-    settings_df.loc[
-        settings_df["chiave"] == "obiettivo_capitale",
-        "valore"
-    ].iloc[0]
-)
+    patrimonio_iniziale = float(
+        settings_df.loc[
+            settings_df["chiave"] == "patrimonio_iniziale",
+            "valore"
+        ].iloc[0]
+    )
+
+    obiettivo_capitale = float(
+        settings_df.loc[
+            settings_df["chiave"] == "obiettivo_capitale",
+            "valore"
+        ].iloc[0]
+    )
+
     entrate = df[df["type"] == "income"]["amount"].sum()
     uscite = df[df["type"] == "expense"]["amount"].sum()
-    saldo = entrate - uscite
-patrimonio_attuale = patrimonio_iniziale + saldo
 
-mancante = max(
-    0,
-    obiettivo_capitale - patrimonio_attuale
-)
+    saldo = entrate - uscite
+
+    patrimonio_attuale = patrimonio_iniziale + saldo
+
+    mancante = max(
+        0,
+        obiettivo_capitale - patrimonio_attuale
+    )
+
     col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
@@ -160,55 +171,63 @@ mancante = max(
         "Saldo",
         f"€ {saldo:,.2f}"
     )
-col4.metric(
-    "Patrimonio",
-    f"€ {patrimonio_attuale:,.2f}"
-)
+
+    col4.metric(
+        "Patrimonio",
+        f"€ {patrimonio_attuale:,.2f}"
+    )
+
+    st.subheader("🎯 Obiettivo")
+
+    col5, col6 = st.columns(2)
+
+    col5.metric(
+        "Obiettivo",
+        f"€ {obiettivo_capitale:,.2f}"
+    )
+
+    col6.metric(
+        "Mancano",
+        f"€ {mancante:,.2f}"
+    )
+
     st.subheader("📋 Movimenti")
 
     st.dataframe(
         df,
         use_container_width=True
     )
-st.subheader("🎯 Obiettivo")
 
-st.metric(
-    "Obiettivo capitale",
-    f"€ {obiettivo_capitale:,.2f}"
-)
+    # ==========================
+    # ELIMINA MOVIMENTO
+    # ==========================
 
-st.metric(
-    "Mancano",
-    f"€ {mancante:,.2f}"
-)
-# ==========================
-# ELIMINA MOVIMENTO
-# ==========================
+    st.subheader("🗑️ Elimina movimento")
 
-st.subheader("🗑️ Elimina movimento")
-
-movimento_da_eliminare = st.selectbox(
-    "Seleziona il movimento",
-    df.index,
-    format_func=lambda i: (
-        f"{df.loc[i, 'date']} | "
-        f"{df.loc[i, 'type']} | "
-        f"{df.loc[i, 'category']} | "
-        f"€ {df.loc[i, 'amount']}"
+    movimento_da_eliminare = st.selectbox(
+        "Seleziona il movimento",
+        df.index,
+        format_func=lambda i: (
+            f"{df.loc[i, 'date']} | "
+            f"{df.loc[i, 'category']} | "
+            f"€ {df.loc[i, 'amount']}"
+        )
     )
-)
 
-if st.button("🗑️ Elimina selezionato"):
+    conferma = st.checkbox(
+        "Confermo di voler eliminare il movimento"
+    )
 
-    # +2 perché Google Sheets parte da riga 1
-    # e la prima riga contiene le intestazioni
-    numero_riga_sheet = movimento_da_eliminare + 2
+    if conferma and st.button("🗑️ Elimina selezionato"):
 
-    sheet.delete_rows(numero_riga_sheet)
+        numero_riga_sheet = movimento_da_eliminare + 2
 
-    st.success("Movimento eliminato!")
+        sheet.delete_rows(numero_riga_sheet)
 
-    st.rerun()
+        st.success("Movimento eliminato!")
+
+        st.rerun()
+
     # ==========================
     # ENTRATE VS USCITE
     # ==========================
@@ -258,13 +277,15 @@ if st.button("🗑️ Elimina selezionato"):
         )
 
     # ==========================
-    # ANDAMENTO PATRIMONIO
+    # PATRIMONIO NEL TEMPO
     # ==========================
 
     df["date"] = pd.to_datetime(
-    df["date"],
-    errors="coerce"
-)
+        df["date"],
+        errors="coerce"
+    )
+
+    df = df.dropna(subset=["date"])
 
     df["signed_amount"] = df.apply(
         lambda row: row["amount"]
@@ -275,7 +296,7 @@ if st.button("🗑️ Elimina selezionato"):
 
     df = df.sort_values("date")
 
-    df["capital"] = df["signed_amount"].cumsum()
+    df["capital"] = patrimonio_iniziale + df["signed_amount"].cumsum()
 
     fig3 = px.line(
         df,
