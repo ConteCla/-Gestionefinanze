@@ -198,7 +198,10 @@ if not df.empty:
     # ANDAMENTO PATRIMONIO
     # ==========================
 
-    df["date"] = pd.to_datetime(df["date"])
+    df["date"] = pd.to_datetime(
+    df["date"],
+    errors="coerce"
+)
 
     df["signed_amount"] = df.apply(
         lambda row: row["amount"]
