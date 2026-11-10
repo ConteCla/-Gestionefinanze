@@ -9,8 +9,8 @@ st.title("💰 Gestione Finanze")
 SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSt5GvPYQSg7aJltt1mYTOMPErsr95EAAtMfGO7TGzxYa86K_ZXGvZhXWf2olbHP3IjDb_niZ4oyT3m/pub?output=csv"
 
 df = pd.read_csv(SHEET_URL)
-entrate = df[df["type"] == "income"]["amount"].sum()
-uscite = df[df["type"] == "expense"]["amount"].sum()
+entrate = df[df["Type"] == "income"]["Amount"].sum()
+uscite = df[df["Type"] == "expense"]["Amount"].sum()
 saldo = entrate - uscite
 
 col1, col2, col3 = st.columns(3)
@@ -24,15 +24,15 @@ st.subheader("Movimenti")
 st.dataframe(df)
 
 grafico = (
-    df.groupby("type")["amount"]
+    df.groupby("Type")["Amount"]
     .sum()
     .reset_index()
 )
 
 fig = px.bar(
     grafico,
-    x="type",
-    y="amount",
+    x="Type",
+    y="Amount",
     color="type",
     title="Entrate vs Uscite"
 )
