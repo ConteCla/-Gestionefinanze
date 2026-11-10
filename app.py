@@ -79,7 +79,7 @@ with st.expander("➕ Aggiungi movimento"):
         "Bar/merende",
         "Cellulare",
         "Barbiere",
-        "Banca"
+        "Banca",
         "Altro"
     ]
 )
@@ -186,11 +186,8 @@ if not spese_categoria.empty:
         fig2,
         use_container_width=True
     )
-    
-)
-else:
-    st.info("Nessun dato presente.")
-    # ==========================
+
+# ==========================
 # ANDAMENTO PATRIMONIO
 # ==========================
 
@@ -218,3 +215,7 @@ fig3 = px.line(
 st.plotly_chart(
     fig3,
     use_container_width=True
+)
+
+else:
+    st.info("Nessun dato presente.")
