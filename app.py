@@ -225,5 +225,3 @@ else:
 
     st.info("Nessun dato presente.")
 
-else:
-    st.info("Nessun dato presente.")
