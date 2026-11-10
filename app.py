@@ -186,5 +186,34 @@ if not spese_categoria.empty:
         fig2,
         use_container_width=True
     )
+    # ==========================
+# ANDAMENTO PATRIMONIO
+# ==========================
+
+df["date"] = pd.to_datetime(df["date"])
+
+df["signed_amount"] = df.apply(
+    lambda x: x["amount"]
+    if x["type"] == "income"
+    else -x["amount"],
+    axis=1
+)
+
+df = df.sort_values("date")
+
+df["capital"] = df["signed_amount"].cumsum()
+
+fig3 = px.line(
+    df,
+    x="date",
+    y="capital",
+    markers=True,
+    title="📈 Andamento Patrimonio"
+)
+
+st.plotly_chart(
+    fig3,
+    use_container_width=True
+)
 else:
     st.info("Nessun dato presente.")
