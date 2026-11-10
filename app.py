@@ -135,7 +135,45 @@ if not df.empty:
             "valore"
         ].iloc[0]
     )
+st.subheader("⚙️ Impostazioni")
 
+nuovo_patrimonio = st.number_input(
+    "Patrimonio iniziale (€)",
+    value=float(patrimonio_iniziale),
+    step=100.0
+)
+
+nuovo_obiettivo = st.number_input(
+    "Obiettivo capitale (€)",
+    value=float(obiettivo_capitale),
+    step=1000.0
+)
+
+if st.button("💾 Salva impostazioni"):
+
+    riga_patrimonio = settings_df.index[
+        settings_df["chiave"] == "patrimonio_iniziale"
+    ][0] + 2
+
+    riga_obiettivo = settings_df.index[
+        settings_df["chiave"] == "obiettivo_capitale"
+    ][0] + 2
+
+    settings_sheet.update_cell(
+        riga_patrimonio,
+        2,
+        nuovo_patrimonio
+    )
+
+    settings_sheet.update_cell(
+        riga_obiettivo,
+        2,
+        nuovo_obiettivo
+    )
+
+    st.success("Impostazioni salvate")
+
+    st.rerun()
     obiettivo_capitale = float(
         settings_df.loc[
             settings_df["chiave"] == "obiettivo_capitale",
