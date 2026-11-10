@@ -99,7 +99,7 @@ with st.expander("➕ Aggiungi movimento"):
             tipo,
             categoria,
             importo,
-            descrizione
+            nota
         ]
 
         sheet.append_row(nuova_riga)
