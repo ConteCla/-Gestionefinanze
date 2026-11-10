@@ -6,7 +6,9 @@ st.set_page_config(page_title="Gestione Finanze", layout="wide")
 
 st.title("💰 Gestione Finanze")
 
-df = pd.read_csv("transactions.csv")
+SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSt5GvPYQSg7aJltt1mYTOMPErsr95EAAtMfGO7TGzxYa86K_ZXGvZhXWf2olbHP3IjDb_niZ4oyT3m/pub?output=csv"
+
+df = pd.read_csv(SHEET_URL)
 
 entrate = df[df["type"] == "income"]["amount"].sum()
 uscite = df[df["type"] == "expense"]["amount"].sum()
