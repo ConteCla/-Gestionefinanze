@@ -26,9 +26,12 @@ creds = Credentials.from_service_account_info(
 
 client = gspread.authorize(creds)
 
-sheet = client.open_by_key(
+file = client.open_by_key(
     "1I66hss5URRD39FB9YmvIxC8T_IKxXx1szWmXiOjripo"
-).sheet1
+)
+
+sheet = file.sheet1
+settings_sheet = file.worksheet("Impostazioni")
 
 # ==========================
 # LOAD DATA
@@ -37,7 +40,9 @@ sheet = client.open_by_key(
 data = sheet.get_all_records()
 
 df = pd.DataFrame(data)
+settings_data = settings_sheet.get_all_records()
 
+settings_df = pd.DataFrame(settings_data)
 if not df.empty:
     df.columns = df.columns.str.lower()
 
@@ -117,12 +122,29 @@ with st.expander("➕ Aggiungi movimento"):
 if not df.empty:
 
     df["amount"] = pd.to_numeric(df["amount"])
+patrimonio_iniziale = float(
+    settings_df.loc[
+        settings_df["chiave"] == "patrimonio_iniziale",
+        "valore"
+    ].iloc[0]
+)
 
+obiettivo_capitale = float(
+    settings_df.loc[
+        settings_df["chiave"] == "obiettivo_capitale",
+        "valore"
+    ].iloc[0]
+)
     entrate = df[df["type"] == "income"]["amount"].sum()
     uscite = df[df["type"] == "expense"]["amount"].sum()
     saldo = entrate - uscite
+patrimonio_attuale = patrimonio_iniziale + saldo
 
-    col1, col2, col3 = st.columns(3)
+mancante = max(
+    0,
+    obiettivo_capitale - patrimonio_attuale
+)
+    col1, col2, col3, col4 = st.columns(4)
 
     col1.metric(
         "Entrate",
@@ -138,13 +160,27 @@ if not df.empty:
         "Saldo",
         f"€ {saldo:,.2f}"
     )
-
+col4.metric(
+    "Patrimonio",
+    f"€ {patrimonio_attuale:,.2f}"
+)
     st.subheader("📋 Movimenti")
 
     st.dataframe(
         df,
         use_container_width=True
     )
+st.subheader("🎯 Obiettivo")
+
+st.metric(
+    "Obiettivo capitale",
+    f"€ {obiettivo_capitale:,.2f}"
+)
+
+st.metric(
+    "Mancano",
+    f"€ {mancante:,.2f}"
+)
 # ==========================
 # ELIMINA MOVIMENTO
 # ==========================
