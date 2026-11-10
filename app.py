@@ -56,7 +56,33 @@ with st.expander("➕ Aggiungi movimento"):
         ["income", "expense"]
     )
 
-    categoria = st.text_input("Categoria")
+    categoria = st.selectbox(
+    "Categoria",
+    [
+        "Stipendio",
+        "Bollette",
+        "Affitto",
+        "Spesa",
+        "Benzina",
+        "Puzzone",
+        "Ristorante",
+        "Viaggi",
+        "Investimenti",
+        "Tempo Libero",
+        "Casa",
+        "Sport",
+        "Shopping",
+        "Salute",
+        "Mezzi di trasporto",
+        "Regali",
+        "Macchina",
+        "Bar/merende",
+        "Cellulare",
+        "Barbiere",
+        "Banca"
+        "Altro"
+    ]
+)
 
     importo = st.number_input(
         "Importo",
