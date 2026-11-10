@@ -5,13 +5,16 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import date
 
-st.set_page_config(page_title="Gestione Finanze", layout="wide")
+st.set_page_config(
+    page_title="Gestione Finanze",
+    layout="wide"
+)
 
 # ==========================
 # GOOGLE SHEETS CONNECTION
 # ==========================
 
-sscope = [
+scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
@@ -57,32 +60,31 @@ with st.expander("➕ Aggiungi movimento"):
     )
 
     categoria = st.selectbox(
-    "Categoria",
-    [
-        "Stipendio",
-        "Bollette",
-        "Affitto",
-        "Spesa",
-        "Benzina",
-        "Puzzone",
-        "Ristorante",
-        "Viaggi",
-        "Investimenti",
-        "Tempo Libero",
-        "Casa",
-        "Sport",
-        "Shopping",
-        "Salute",
-        "Mezzi di trasporto",
-        "Regali",
-        "Macchina",
-        "Bar/merende",
-        "Cellulare",
-        "Barbiere",
-        "Banca",
-        "Altro"
-    ]
-)
+        "Categoria",
+        [
+            "Stipendio",
+            "Bollette",
+            "Affitto",
+            "Spesa",
+            "Benzina",
+            "Ristorante",
+            "Viaggi",
+            "Investimenti",
+            "Tempo Libero",
+            "Casa",
+            "Sport",
+            "Shopping",
+            "Salute",
+            "Mezzi di trasporto",
+            "Regali",
+            "Macchina",
+            "Bar/merende",
+            "Cellulare",
+            "Barbiere",
+            "Banca",
+            "Altro"
+        ]
+    )
 
     importo = st.number_input(
         "Importo",
@@ -107,16 +109,17 @@ with st.expander("➕ Aggiungi movimento"):
         st.success("Movimento salvato!")
 
         st.rerun()
+
 # ==========================
 # DASHBOARD
 # ==========================
 
 if not df.empty:
 
+    df["amount"] = pd.to_numeric(df["amount"])
+
     entrate = df[df["type"] == "income"]["amount"].sum()
-
     uscite = df[df["type"] == "expense"]["amount"].sum()
-
     saldo = entrate - uscite
 
     col1, col2, col3 = st.columns(3)
@@ -144,7 +147,7 @@ if not df.empty:
     )
 
     # ==========================
-    # GRAFICO ENTRATE VS USCITE
+    # ENTRATE VS USCITE
     # ==========================
 
     grafico = (
@@ -167,7 +170,7 @@ if not df.empty:
     )
 
     # ==========================
-    # GRAFICO SPESE PER CATEGORIA
+    # SPESE PER CATEGORIA
     # ==========================
 
     spese_categoria = (
@@ -183,7 +186,7 @@ if not df.empty:
             spese_categoria,
             names="category",
             values="amount",
-            title="Ripartizione Spese"
+            title="🥧 Ripartizione Spese"
         )
 
         st.plotly_chart(
@@ -198,9 +201,9 @@ if not df.empty:
     df["date"] = pd.to_datetime(df["date"])
 
     df["signed_amount"] = df.apply(
-        lambda x: x["amount"]
-        if x["type"] == "income"
-        else -x["amount"],
+        lambda row: row["amount"]
+        if row["type"] == "income"
+        else -row["amount"],
         axis=1
     )
 
@@ -224,4 +227,3 @@ if not df.empty:
 else:
 
     st.info("Nessun dato presente.")
-
