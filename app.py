@@ -23,7 +23,9 @@ creds = Credentials.from_service_account_info(
 
 client = gspread.authorize(creds)
 
-sheet = client.open("Gestione Finanze").sheet1
+sheet = client.open_by_key(
+    "1I66hss5URRD39FB9YmvIxC8T_IKxXx1szWmXiOjripo"
+).sheet1
 
 # ==========================
 # LOAD DATA
