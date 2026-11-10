@@ -6,9 +6,7 @@ st.set_page_config(page_title="Gestione Finanze", layout="wide")
 
 st.title("💰 Gestione Finanze")
 
-SHEET_URL = "INCOLLA QUI ESATTAMENTE IL LINK CHE VEDI NELLA FINESTRA 'Publish to the web'"
-
-st.write(SHEET_URL)
+SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSt5GvPYQSg7aJltt1mYTOMPErsr95EAAtMfGO7TGzxYa86K_ZXGvZhXWf2olbHP3IjDb_niZ4oyT3m/pub?output=csv"
 
 df = pd.read_csv(SHEET_URL)
 
