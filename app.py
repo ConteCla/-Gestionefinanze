@@ -162,6 +162,29 @@ if not df.empty:
         fig,
         use_container_width=True
     )
+# ==========================
+# GRAFICO SPESE PER CATEGORIA
+# ==========================
 
+spese_categoria = (
+    df[df["type"] == "expense"]
+    .groupby("category")["amount"]
+    .sum()
+    .reset_index()
+)
+
+if not spese_categoria.empty:
+
+    fig2 = px.pie(
+        spese_categoria,
+        names="category",
+        values="amount",
+        title="Ripartizione Spese"
+    )
+
+    st.plotly_chart(
+        fig2,
+        use_container_width=True
+    )
 else:
     st.info("Nessun dato presente.")
