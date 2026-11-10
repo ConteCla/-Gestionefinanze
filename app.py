@@ -90,7 +90,7 @@ with st.expander("➕ Aggiungi movimento"):
         step=1.0
     )
 
-    descrizione = st.text_input("Descrizione")
+    nota = st.text_input("Nota")
 
     if st.button("Salva movimento"):
 
