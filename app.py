@@ -319,40 +319,98 @@ if not df.empty:
         )
 
     # ==========================
-    # PATRIMONIO NEL TEMPO
-    # ==========================
+# PATRIMONIO NEL TEMPO + PREVISIONE
+# ==========================
 
-    df["date"] = pd.to_datetime(
-        df["date"],
-        errors="coerce"
+df["date"] = pd.to_datetime(
+    df["date"],
+    errors="coerce"
+)
+
+df = df.dropna(subset=["date"])
+
+df["signed_amount"] = df.apply(
+    lambda row: row["amount"]
+    if row["type"] == "income"
+    else -row["amount"],
+    axis=1
+)
+
+df = df.sort_values("date")
+
+df["capital"] = patrimonio_iniziale + df["signed_amount"].cumsum()
+
+# Patrimonio reale
+fig3 = px.line(
+    df,
+    x="date",
+    y="capital",
+    markers=True,
+    title="📈 Andamento Patrimonio"
+)
+
+# ------------------
+# PREVISIONE
+# ------------------
+
+oggi = pd.Timestamp.today()
+
+mesi_passati = max(
+    1,
+    len(
+        pd.date_range(
+            start=f"{oggi.year}-01-01",
+            end=oggi,
+            freq="MS"
+        )
     )
+)
 
-    df = df.dropna(subset=["date"])
+risparmio_medio_mensile = saldo / mesi_passati
 
-    df["signed_amount"] = df.apply(
-        lambda row: row["amount"]
-        if row["type"] == "income"
-        else -row["amount"],
-        axis=1
+ultimo_capitale = df["capital"].iloc[-1]
+
+date_future = pd.date_range(
+    start=oggi,
+    end=f"{oggi.year}-12-31",
+    freq="MS"
+)
+
+capitali_previsti = []
+
+capitale = ultimo_capitale
+
+for _ in date_future:
+
+    capitale += risparmio_medio_mensile
+
+    capitali_previsti.append(capitale)
+
+previsione_df = pd.DataFrame({
+    "date": date_future,
+    "capital": capitali_previsti
+})
+
+fig3.add_scatter(
+    x=previsione_df["date"],
+    y=previsione_df["capital"],
+    mode="lines+markers",
+    name="Previsione",
+    line=dict(
+        color="orange",
+        dash="dash"
     )
+)
 
-    df = df.sort_values("date")
+fig3.update_xaxes(
+    dtick="M1",
+    tickformat="%b"
+)
 
-    df["capital"] = patrimonio_iniziale + df["signed_amount"].cumsum()
-
-    fig3 = px.line(
-        df,
-        x="date",
-        y="capital",
-        markers=True,
-        title="📈 Andamento Patrimonio"
-    )
-
-    st.plotly_chart(
-        fig3,
-        use_container_width=True
-    )
-
+st.plotly_chart(
+    fig3,
+    use_container_width=True
+)
 
 else:
 
