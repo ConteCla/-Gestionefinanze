@@ -340,29 +340,6 @@ if not df.empty:
         use_container_width=True
     )
 # ==========================
-# PREVISIONE PATRIMONIO
-# ==========================
-
-risparmio_medio = saldo
-
-previsione_3 = patrimonio_attuale + (risparmio_medio * 3)
-previsione_6 = patrimonio_attuale + (risparmio_medio * 6)
-previsione_12 = patrimonio_attuale + (risparmio_medio * 12)
-
-st.subheader("🔮 Previsione Patrimonio")
-
-c1, c2, c3 = st.columns(3)
-
-c1.metric(
-    "Tra 3 mesi",
-    f"€ {previsione_3:,.2f}"
-)
-
-c2.metric(
-    "Tra 6 mesi",
-    f"€ {previsione_6:,.2f}"
-)
-  # ==========================
     # PREVISIONE PATRIMONIO
     # ==========================
 
@@ -414,6 +391,10 @@ c2.metric(
         st.warning(
             "Impossibile stimare l'obiettivo: saldo non positivo."
         )
+
+else:
+
+    st.info("Nessun dato presente.")
 
 else:
 
