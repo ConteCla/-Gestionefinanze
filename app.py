@@ -242,6 +242,7 @@ with st.expander("➕ Aggiungi movimento"):
 # ==========================
 # DASHBOARD
 # ==========================
+saldo = 0
 
 if not df.empty:
 
@@ -471,7 +472,7 @@ if mese_nome != "Tutti":
         "Mezzi di trasporto",
         "Macchina",
         "Puzzone",
-        "Cellulare"
+        "Cellulare",
         "Salute"
     ]
 
