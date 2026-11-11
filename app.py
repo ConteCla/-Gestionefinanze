@@ -138,7 +138,7 @@ with st.expander("➕ Aggiungi movimento"):
         "Tipo",
         ["income", "expense"]
     )
- categorie = [
+    categorie = [
         "Stipendio",
         "Bollette",
         "Affitto",
