@@ -394,70 +394,10 @@ fig3 = px.line(
     markers=True,
     title="📈 Andamento Patrimonio"
 )
-
-# ------------------
-# PREVISIONE
-# ------------------
-
-oggi = pd.Timestamp.today()
-
-mesi_passati = max(
-    1,
-    len(
-        pd.date_range(
-            start=f"{oggi.year}-01-01",
-            end=oggi,
-            freq="MS"
-        )
-    )
-)
-
-risparmio_medio_mensile = saldo / mesi_passati
-
-ultimo_capitale = df["capital"].iloc[-1]
-
-ultimo_giorno_reale = df["date"].max()
-
-date_future = pd.date_range(
-    start=ultimo_giorno_reale + pd.DateOffset(months=1),
-    end=f"{oggi.year}-12-31",
-    freq="MS"
-)
-
-capitali_previsti = []
-
-capitale = ultimo_capitale
-
-for _ in date_future:
-
-    capitale += risparmio_medio_mensile
-
-    capitali_previsti.append(capitale)
-
-previsione_df = pd.DataFrame({
-    "date": date_future,
-    "capital": capitali_previsti
-})
-
-fig3.add_scatter(
-    x=previsione_df["date"],
-    y=previsione_df["capital"],
-    mode="lines+markers",
-    name="Previsione",
-    line=dict(
-        color="orange",
-        dash="dash"
-    )
-)
-
 fig3.update_xaxes(
-    range=[
-        f"{oggi.year}-01-01",
-        f"{oggi.year}-12-31"
-    ],
-    dtick="M1",
-    tickformat="%b"
+    tickformat="%d/%m/%Y"
 )
+
 
 st.plotly_chart(
     fig3,
