@@ -441,12 +441,67 @@ else:
         title="📈 Andamento Patrimonio"
     )
 
+    # ==========================
+    # PREVISIONE
+    # ==========================
+
+    oggi = pd.Timestamp.today()
+
+    mesi_passati = max(
+        1,
+        oggi.month
+    )
+
+    risparmio_medio = saldo / mesi_passati
+
+    ultimo_capitale = df["capital"].iloc[-1]
+
+    date_future = pd.date_range(
+        start=pd.Timestamp(
+            year=oggi.year,
+            month=oggi.month + 1 if oggi.month < 12 else 12,
+            day=1
+        ),
+        end=f"{oggi.year}-12-01",
+        freq="MS"
+    )
+
+    capitale_previsto = ultimo_capitale
+
+    capitali_previsti = []
+
+    for _ in date_future:
+
+        capitale_previsto += risparmio_medio
+
+        capitali_previsti.append(
+            capitale_previsto
+        )
+
+    if len(date_future) > 0:
+
+        fig3.add_scatter(
+            x=date_future,
+            y=capitali_previsti,
+            mode="lines+markers",
+            name="Previsione",
+            line=dict(
+                color="orange",
+                dash="dash",
+                width=3
+            )
+        )
+
     fig3.update_xaxes(
-        tickformat="%d/%m/%Y"
+        range=[
+            f"{oggi.year}-01-01",
+            f"{oggi.year}-12-31"
+        ],
+        dtick="M1",
+        tickformat="%b"
     )
 
     st.plotly_chart(
         fig3,
         use_container_width=True
     )
-
