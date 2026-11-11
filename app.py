@@ -405,6 +405,10 @@ fig3.add_scatter(
 )
 
 fig3.update_xaxes(
+    range=[
+        f"{oggi.year}-01-01",
+        f"{oggi.year}-12-31"
+    ],
     dtick="M1",
     tickformat="%b"
 )
