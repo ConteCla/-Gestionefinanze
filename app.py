@@ -197,9 +197,33 @@ with st.expander("➕ Aggiungi movimento"):
 
             sheet.append_row(nuova_riga)
 
-            st.success("Movimento salvato!")
+# Aggiorna automaticamente la categoria Banca
 
-            st.rerun()
+indice_banca = patrimonio_df[
+    patrimonio_df["categoria"] == "Banca"
+].index[0]
+
+valore_banca = float(
+    patrimonio_df.loc[
+        indice_banca,
+        "valore"
+    ]
+)
+
+if tipo == "income":
+    nuovo_valore_banca = valore_banca + importo
+else:
+    nuovo_valore_banca = valore_banca - importo
+
+patrimonio_sheet.update_cell(
+    indice_banca + 2,
+    2,
+    nuovo_valore_banca
+)
+
+st.success("Movimento salvato!")
+
+st.rerun()
 
 # ==========================
 # DASHBOARD
