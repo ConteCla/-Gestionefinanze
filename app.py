@@ -401,45 +401,52 @@ if not df.empty:
             use_container_width=True
         )
 
-    # ==========================
+# ==========================
 # PATRIMONIO NEL TEMPO + PREVISIONE
 # ==========================
 
-df["date"] = pd.to_datetime(
-    df["date"],
-    errors="coerce"
-)
-
-df = df.dropna(subset=["date"])
-
-df["signed_amount"] = df.apply(
-    lambda row: row["amount"]
-    if row["type"] == "income"
-    else -row["amount"],
-    axis=1
-)
-
-df = df.sort_values("date")
 if df.empty:
+
     st.info("Nessun movimento presente.")
+
 else:
-    df["capital"] = totale_asset - saldo + df["signed_amount"].cumsum()
 
-# Patrimonio reale
-fig3 = px.line(
-    df,
-    x="date",
-    y="capital",
-    markers=True,
-    title="📈 Andamento Patrimonio"
-)
-fig3.update_xaxes(
-    tickformat="%d/%m/%Y"
-)
+    df["date"] = pd.to_datetime(
+        df["date"],
+        errors="coerce"
+    )
 
+    df = df.dropna(subset=["date"])
 
-st.plotly_chart(
-    fig3,
-    use_container_width=True
-)
+    df["signed_amount"] = df.apply(
+        lambda row: row["amount"]
+        if row["type"] == "income"
+        else -row["amount"],
+        axis=1
+    )
+
+    df = df.sort_values("date")
+
+    df["capital"] = (
+        totale_asset
+        - saldo
+        + df["signed_amount"].cumsum()
+    )
+
+    fig3 = px.line(
+        df,
+        x="date",
+        y="capital",
+        markers=True,
+        title="📈 Andamento Patrimonio"
+    )
+
+    fig3.update_xaxes(
+        tickformat="%d/%m/%Y"
+    )
+
+    st.plotly_chart(
+        fig3,
+        use_container_width=True
+    )
 
