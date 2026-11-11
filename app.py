@@ -124,8 +124,10 @@ if st.button(
     st.success("Asset aggiornato")
 
     st.rerun()
+    # ==========================
+# FORM NUOVO MOVIMENTO
 # ==========================
-# with st.expander("➕ Aggiungi movimento"):
+with st.expander("➕ Aggiungi movimento"):
 
     data_movimento = st.date_input(
         "Data",
@@ -136,8 +138,47 @@ if st.button(
         "Tipo",
         ["income", "expense"]
     )
+ categorie = [
+        "Stipendio",
+        "Bollette",
+        "Affitto",
+        "Spesa",
+        "Benzina",
+        "Ristorante",
+        "Viaggi",
+        "Investimenti",
+        "Tempo Libero",
+        "Casa",
+        "Sport",
+        "Shopping",
+        "Salute",
+        "Mezzi di trasporto",
+        "Regali",
+        "Macchina",
+        "Bar/merende",
+        "Cellulare",
+        "Barbiere",
+        "Banca",
+        "Altro (scrivi tu)"
+    ]
 
-    ...
+    categoria_selezionata = st.selectbox(
+        "Categoria",
+        categorie
+    )
+
+    if categoria_selezionata == "Altro (scrivi tu)":
+        categoria = st.text_input(
+            "Inserisci nuova categoria"
+        )
+    else:
+        categoria = categoria_selezionata
+
+    importo = st.number_input(
+        "Importo",
+        min_value=0.0,
+        step=1.0
+    )
 
     nota = st.text_input("Nota")
 
