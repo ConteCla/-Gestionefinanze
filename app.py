@@ -400,7 +400,66 @@ if not df.empty:
             fig2,
             use_container_width=True
         )
+ # ==========================
+    # FISSE VS DESIDERI VS RISPARMIO
+    # ==========================
 
+    categorie_fisse = [
+        "Affitto",
+        "Bollette",
+        "Cellulare",
+        "Banca",
+        "Mezzi di trasporto",
+        "Macchina",
+        "Salute"
+    ]
+
+    categorie_desideri = [
+        "Ristorante",
+        "Shopping",
+        "Viaggi",
+        "Tempo Libero",
+        "Bar/merende",
+        "Regali",
+        "Sport"
+    ]
+
+    spese_fisse = df[
+        (df["type"] == "expense") &
+        (df["category"].isin(categorie_fisse))
+    ]["amount"].sum()
+
+    spese_desideri = df[
+        (df["type"] == "expense") &
+        (df["category"].isin(categorie_desideri))
+    ]["amount"].sum()
+
+    risparmio = max(0, saldo)
+
+    analisi_df = pd.DataFrame({
+        "Voce": [
+            "Spese Fisse",
+            "Desideri",
+            "Risparmio"
+        ],
+        "Valore": [
+            spese_fisse,
+            spese_desideri,
+            risparmio
+        ]
+    })
+
+    fig_analisi = px.pie(
+        analisi_df,
+        names="Voce",
+        values="Valore",
+        title="🧠 Fisse vs Desideri vs Risparmio"
+    )
+
+    st.plotly_chart(
+        fig_analisi,
+        use_container_width=True
+    )
 # ==========================
 # PATRIMONIO NEL TEMPO + PREVISIONE
 # ==========================
