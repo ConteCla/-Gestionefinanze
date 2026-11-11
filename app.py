@@ -106,7 +106,10 @@ valore_asset = st.number_input(
     step=100.0
 )
 
-if st.button("Salva movimento"):
+if st.button(
+    "Salva movimento",
+    key="salva_movimento"
+):
 
     if categoria == "":
         st.warning("Inserisci una categoria")
