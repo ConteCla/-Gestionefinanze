@@ -222,7 +222,7 @@ if not df.empty:
     # IMPOSTAZIONI
     # ==========================
 
-   st.subheader("⚙️ Impostazioni")
+    st.subheader("⚙️ Impostazioni")
 
     nuovo_obiettivo = st.number_input(
         "Obiettivo capitale (€)",
@@ -248,11 +248,11 @@ if not df.empty:
 
     entrate = df[df["type"] == "income"]["amount"].sum()
     uscite = df[df["type"] == "expense"]["amount"].sum()
-    
+
     saldo = entrate - uscite
-    
+
     patrimonio_attuale = totale_asset
-    
+
     mancante = max(
         0,
         obiettivo_capitale - patrimonio_attuale
