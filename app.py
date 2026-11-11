@@ -36,7 +36,7 @@ file = client.open_by_key(
 
 sheet = file.sheet1
 settings_sheet = file.worksheet("Impostazioni")
-
+patrimonio_sheet = file.worksheet("Patrimonio")
 # ==========================
 # LOAD DATA
 # ==========================
@@ -46,12 +46,54 @@ settings_data = settings_sheet.get_all_records()
 
 df = pd.DataFrame(data)
 settings_df = pd.DataFrame(settings_data)
+patrimonio_data = patrimonio_sheet.get_all_records()
+patrimonio_df = pd.DataFrame(patrimonio_data)
 
 # ==========================
 # TITLE
 # ==========================
 
 st.title("💰 Gestione Finanze")
+st.subheader("🏦 Allocazione Patrimonio")
+
+totale_asset = patrimonio_df["valore"].sum()
+
+col1, col2 = st.columns([1, 2])
+
+with col1:
+
+    st.metric(
+        "Patrimonio investito",
+        f"€ {totale_asset:,.0f}"
+    )
+
+    for _, riga in patrimonio_df.iterrows():
+
+        percentuale = (
+            riga["valore"] / totale_asset * 100
+            if totale_asset > 0
+            else 0
+        )
+
+        st.write(
+            f"**{riga['categoria']}** "
+            f"€ {riga['valore']:,.0f} "
+            f"({percentuale:.1f}%)"
+        )
+
+with col2:
+
+    fig_asset = px.pie(
+        patrimonio_df,
+        names="categoria",
+        values="valore",
+        title="Ripartizione Patrimonio"
+    )
+
+    st.plotly_chart(
+        fig_asset,
+        use_container_width=True
+    )
 
 # ==========================
 # FORM NUOVO MOVIMENTO
