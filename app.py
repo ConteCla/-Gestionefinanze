@@ -336,12 +336,10 @@ if mese_nome != "Tutti":
         st.rerun()
 
     entrate = df_filtrato[
-    df_filtrato["type"] == "income"
-]["amount"].sum()
+    df_filtrato["type"] == "income"]["amount"].sum()
 
-uscite = df_filtrato[
-    df_filtrato["type"] == "expense"
-]["amount"].sum()
+    uscite = df_filtrato[
+    df_filtrato["type"] == "expense"]["amount"].sum()
 
     saldo = entrate - uscite
 
