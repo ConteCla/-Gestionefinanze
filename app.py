@@ -48,7 +48,7 @@ df = pd.DataFrame(data)
 settings_df = pd.DataFrame(settings_data)
 patrimonio_data = patrimonio_sheet.get_all_records()
 patrimonio_df = pd.DataFrame(patrimonio_data)
-
+totale_asset = patrimonio_df["valore"].sum()
 # ==========================
 # TITLE
 # ==========================
@@ -56,14 +56,13 @@ patrimonio_df = pd.DataFrame(patrimonio_data)
 st.title("💰 Gestione Finanze")
 st.subheader("🏦 Allocazione Patrimonio")
 
-totale_asset = patrimonio_df["valore"].sum()
 
 col1, col2 = st.columns([1, 2])
 
 with col1:
 
     st.metric(
-        "Patrimonio investito",
+        "Patrimonio",
         f"€ {totale_asset:,.0f}"
     )
 
@@ -211,12 +210,6 @@ if not df.empty:
     df.columns = df.columns.str.lower()
     df["amount"] = pd.to_numeric(df["amount"])
 
-    patrimonio_iniziale = float(
-        settings_df.loc[
-            settings_df["chiave"] == "patrimonio_iniziale",
-            "valore"
-        ].iloc[0]
-    )
 
     obiettivo_capitale = float(
         settings_df.loc[
@@ -274,7 +267,7 @@ if not df.empty:
 
     saldo = entrate - uscite
 
-    patrimonio_attuale = patrimonio_iniziale + saldo
+    patrimonio_attuale = totale_asset
 
     mancante = max(
         0,
@@ -407,7 +400,7 @@ df["signed_amount"] = df.apply(
 
 df = df.sort_values("date")
 
-df["capital"] = patrimonio_iniziale + df["signed_amount"].cumsum()
+df["capital"] = totale_asset - saldo + df["signed_amount"].cumsum()
 
 # Patrimonio reale
 fig3 = px.line(
