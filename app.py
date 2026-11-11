@@ -173,6 +173,7 @@ with st.expander("➕ Aggiungi movimento"):
         "Cellulare",
         "Barbiere",
         "Banca",
+        "Puzzone",
         "Altro (scrivi tu)"
     ]
 
@@ -409,8 +410,14 @@ if not df.empty:
         "Bollette",
         "Cellulare",
         "Banca",
+        "Spesa",
+        "Benzina",
+        "Casa",
+        "Barbiere",
         "Mezzi di trasporto",
         "Macchina",
+        "Puzzone",
+        "Cellulare"
         "Salute"
     ]
 
