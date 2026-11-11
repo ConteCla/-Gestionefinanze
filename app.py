@@ -211,50 +211,48 @@ with st.expander("➕ Aggiungi movimento"):
 
     nota = st.text_input("Nota")
 
-    if st.button("Salva movimento"):
+   if st.button("Salva movimento", key="salva_movimento"):
 
-    if categoria == "":
-        st.warning("Inserisci una categoria")
+        if categoria == "":
+            st.warning("Inserisci una categoria")
 
-    else:
-
-        nuova_riga = [
-            str(data_movimento),
-            tipo,
-            categoria,
-            importo,
-            nota
-        ]
-
-        sheet.append_row(nuova_riga)
-
-        # Aggiorna automaticamente la categoria Banca
-
-        indice_banca = patrimonio_df[
-            patrimonio_df["categoria"] == "Banca"
-        ].index[0]
-
-        valore_banca = float(
-            patrimonio_df.loc[
-                indice_banca,
-                "valore"
-            ]
-        )
-
-        if tipo == "income":
-            nuovo_valore_banca = valore_banca + importo
         else:
-            nuovo_valore_banca = valore_banca - importo
 
-        patrimonio_sheet.update_cell(
-            indice_banca + 2,
-            2,
-            nuovo_valore_banca
-        )
+            nuova_riga = [
+                str(data_movimento),
+                tipo,
+                categoria,
+                importo,
+                nota
+            ]
 
-        st.success("Movimento salvato!")
+            sheet.append_row(nuova_riga)
 
-        st.rerun()
+            indice_banca = patrimonio_df[
+                patrimonio_df["categoria"] == "Banca"
+            ].index[0]
+
+            valore_banca = float(
+                patrimonio_df.loc[
+                    indice_banca,
+                    "valore"
+                ]
+            )
+
+            if tipo == "income":
+                nuovo_valore_banca = valore_banca + importo
+            else:
+                nuovo_valore_banca = valore_banca - importo
+
+            patrimonio_sheet.update_cell(
+                indice_banca + 2,
+                2,
+                nuovo_valore_banca
+            )
+
+            st.success("Movimento salvato!")
+
+            st.rerun()
 
 # ==========================
 # DASHBOARD
