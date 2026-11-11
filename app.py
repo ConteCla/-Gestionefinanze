@@ -94,7 +94,34 @@ with col2:
         fig_asset,
         use_container_width=True
     )
+st.subheader("✏️ Aggiorna Asset")
 
+asset_scelto = st.selectbox(
+    "Categoria",
+    patrimonio_df["categoria"]
+)
+
+valore_asset = st.number_input(
+    "Nuovo valore",
+    min_value=0.0,
+    step=100.0
+)
+
+if st.button("Salva Asset"):
+
+    indice = patrimonio_df[
+        patrimonio_df["categoria"] == asset_scelto
+    ].index[0]
+
+    patrimonio_sheet.update_cell(
+        indice + 2,
+        2,
+        valore_asset
+    )
+
+    st.success("Asset aggiornato")
+
+    st.rerun()
 # ==========================
 # FORM NUOVO MOVIMENTO
 # ==========================
