@@ -213,47 +213,48 @@ with st.expander("➕ Aggiungi movimento"):
 
     if st.button("Salva movimento"):
 
-        if categoria == "":
-            st.warning("Inserisci una categoria")
-        else:
+    if categoria == "":
+        st.warning("Inserisci una categoria")
 
-            nuova_riga = [
-                str(data_movimento),
-                tipo,
-                categoria,
-                importo,
-                nota
+    else:
+
+        nuova_riga = [
+            str(data_movimento),
+            tipo,
+            categoria,
+            importo,
+            nota
+        ]
+
+        sheet.append_row(nuova_riga)
+
+        # Aggiorna automaticamente la categoria Banca
+
+        indice_banca = patrimonio_df[
+            patrimonio_df["categoria"] == "Banca"
+        ].index[0]
+
+        valore_banca = float(
+            patrimonio_df.loc[
+                indice_banca,
+                "valore"
             ]
+        )
 
-            sheet.append_row(nuova_riga)
+        if tipo == "income":
+            nuovo_valore_banca = valore_banca + importo
+        else:
+            nuovo_valore_banca = valore_banca - importo
 
-# Aggiorna automaticamente la categoria Banca
+        patrimonio_sheet.update_cell(
+            indice_banca + 2,
+            2,
+            nuovo_valore_banca
+        )
 
-indice_banca = patrimonio_df[
-    patrimonio_df["categoria"] == "Banca"
-].index[0]
+        st.success("Movimento salvato!")
 
-valore_banca = float(
-    patrimonio_df.loc[
-        indice_banca,
-        "valore"
-    ]
-)
-
-if tipo == "income":
-    nuovo_valore_banca = valore_banca + importo
-else:
-    nuovo_valore_banca = valore_banca - importo
-
-patrimonio_sheet.update_cell(
-    indice_banca + 2,
-    2,
-    nuovo_valore_banca
-)
-
-st.success("Movimento salvato!")
-
-st.rerun()
+        st.rerun()
 
 # ==========================
 # DASHBOARD
