@@ -370,8 +370,10 @@ risparmio_medio_mensile = saldo / mesi_passati
 
 ultimo_capitale = df["capital"].iloc[-1]
 
+ultimo_giorno_reale = df["date"].max()
+
 date_future = pd.date_range(
-    start=oggi,
+    start=ultimo_giorno_reale + pd.DateOffset(months=1),
     end=f"{oggi.year}-12-31",
     freq="MS"
 )
