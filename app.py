@@ -70,39 +70,40 @@ with st.expander("➕ Aggiungi movimento"):
     )
 
     categorie = [
-    "Stipendio",
-    "Bollette",
-    "Affitto",
-    "Spesa",
-    "Benzina",
-    "Ristorante",
-    "Viaggi",
-    "Investimenti",
-    "Tempo Libero",
-    "Casa",
-    "Sport",
-    "Shopping",
-    "Salute",
-    "Mezzi di trasporto",
-    "Regali",
-    "Macchina",
-    "Bar/merende",
-    "Cellulare",
-    "Barbiere",
-    "Banca",
-    "Altro (scrivi tu)"
-]
+        "Stipendio",
+        "Bollette",
+        "Affitto",
+        "Spesa",
+        "Benzina",
+        "Ristorante",
+        "Viaggi",
+        "Investimenti",
+        "Tempo Libero",
+        "Casa",
+        "Sport",
+        "Shopping",
+        "Salute",
+        "Mezzi di trasporto",
+        "Regali",
+        "Macchina",
+        "Bar/merende",
+        "Cellulare",
+        "Barbiere",
+        "Banca",
+        "Altro (scrivi tu)"
+    ]
 
-categoria = st.selectbox(
-    "Categoria",
-    categorie
-)
-
-if categoria == "Altro (scrivi tu)":
-    categoria = st.text_input(
-        "Nuova categoria"
+    categoria_selezionata = st.selectbox(
+        "Categoria",
+        categorie
     )
 
+    if categoria_selezionata == "Altro (scrivi tu)":
+        categoria = st.text_input(
+            "Inserisci nuova categoria"
+        )
+    else:
+        categoria = categoria_selezionata
 
     importo = st.number_input(
         "Importo",
@@ -114,19 +115,23 @@ if categoria == "Altro (scrivi tu)":
 
     if st.button("Salva movimento"):
 
-        nuova_riga = [
-            str(data_movimento),
-            tipo,
-            categoria,
-            importo,
-            nota
-        ]
+        if categoria == "":
+            st.warning("Inserisci una categoria")
+        else:
 
-        sheet.append_row(nuova_riga)
+            nuova_riga = [
+                str(data_movimento),
+                tipo,
+                categoria,
+                importo,
+                nota
+            ]
 
-        st.success("Movimento salvato!")
+            sheet.append_row(nuova_riga)
 
-        st.rerun()
+            st.success("Movimento salvato!")
+
+            st.rerun()
 
 # ==========================
 # DASHBOARD
