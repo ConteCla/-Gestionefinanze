@@ -362,33 +362,59 @@ c2.metric(
     "Tra 6 mesi",
     f"€ {previsione_6:,.2f}"
 )
-# ==========================
-# TEMPO STIMATO OBIETTIVO
-# ==========================
+  # ==========================
+    # PREVISIONE PATRIMONIO
+    # ==========================
 
-if saldo > 0:
+    risparmio_medio = saldo
 
-    mesi_necessari = round(
-        mancante / saldo,
-        1
+    previsione_3 = patrimonio_attuale + (risparmio_medio * 3)
+    previsione_6 = patrimonio_attuale + (risparmio_medio * 6)
+    previsione_12 = patrimonio_attuale + (risparmio_medio * 12)
+
+    st.subheader("🔮 Previsione Patrimonio")
+
+    c1, c2, c3 = st.columns(3)
+
+    c1.metric(
+        "Tra 3 mesi",
+        f"€ {previsione_3:,.2f}"
     )
 
-    st.subheader("🎯 Raggiungimento Obiettivo")
-
-    st.metric(
-        "Mesi stimati",
-        mesi_necessari
+    c2.metric(
+        "Tra 6 mesi",
+        f"€ {previsione_6:,.2f}"
     )
 
-else:
-
-    st.warning(
-        "Impossibile stimare l'obiettivo: saldo non positivo."
+    c3.metric(
+        "Tra 12 mesi",
+        f"€ {previsione_12:,.2f}"
     )
-c3.metric(
-    "Tra 12 mesi",
-    f"€ {previsione_12:,.2f}"
-)
+
+    # ==========================
+    # TEMPO STIMATO OBIETTIVO
+    # ==========================
+
+    if saldo > 0:
+
+        mesi_necessari = round(
+            mancante / saldo,
+            1
+        )
+
+        st.subheader("🎯 Raggiungimento Obiettivo")
+
+        st.metric(
+            "Mesi stimati",
+            mesi_necessari
+        )
+
+    else:
+
+        st.warning(
+            "Impossibile stimare l'obiettivo: saldo non positivo."
+        )
+
 else:
 
     st.info("Nessun dato presente.")
