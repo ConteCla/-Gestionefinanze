@@ -247,8 +247,59 @@ if not df.empty:
 
     df.columns = df.columns.str.lower()
     df["amount"] = pd.to_numeric(df["amount"])
+    df["date"] = pd.to_datetime(
+    df["date"],
+    errors="coerce"
+)
 
+# ==========================
+# FILTRO MESE/ANNO
+# ==========================
 
+st.subheader("📅 Filtro")
+
+col_f1, col_f2 = st.columns(2)
+
+anni_disponibili = sorted(
+    df["date"].dt.year.dropna().unique(),
+    reverse=True
+)
+
+mesi = {
+    "Tutti": 0,
+    "Gennaio": 1,
+    "Febbraio": 2,
+    "Marzo": 3,
+    "Aprile": 4,
+    "Maggio": 5,
+    "Giugno": 6,
+    "Luglio": 7,
+    "Agosto": 8,
+    "Settembre": 9,
+    "Ottobre": 10,
+    "Novembre": 11,
+    "Dicembre": 12
+}
+
+anno_selezionato = col_f2.selectbox(
+    "Anno",
+    anni_disponibili
+)
+
+mese_nome = col_f1.selectbox(
+    "Mese",
+    list(mesi.keys())
+)
+
+df_filtrato = df[
+    df["date"].dt.year == anno_selezionato
+]
+
+if mese_nome != "Tutti":
+
+    df_filtrato = df_filtrato[
+        df_filtrato["date"].dt.month == mesi[mese_nome]
+    ]
     obiettivo_capitale = float(
         settings_df.loc[
             settings_df["chiave"] == "obiettivo_capitale",
@@ -284,8 +335,13 @@ if not df.empty:
 
         st.rerun()
 
-    entrate = df[df["type"] == "income"]["amount"].sum()
-    uscite = df[df["type"] == "expense"]["amount"].sum()
+    entrate = df_filtrato[
+    df_filtrato["type"] == "income"
+]["amount"].sum()
+
+uscite = df_filtrato[
+    df_filtrato["type"] == "expense"
+]["amount"].sum()
 
     saldo = entrate - uscite
 
@@ -320,9 +376,9 @@ if not df.empty:
     st.subheader("📋 Movimenti")
 
     st.dataframe(
-        df,
-        use_container_width=True
-    )
+    df_filtrato,
+    use_container_width=True
+)
 
     # ==========================
     # ELIMINA MOVIMENTO
@@ -359,7 +415,7 @@ if not df.empty:
     # ==========================
 
     grafico = (
-        df.groupby("type")["amount"]
+        df_filtrato.groupby("type")["amount"]
         .sum()
         .reset_index()
     )
@@ -382,7 +438,7 @@ if not df.empty:
     # ==========================
 
     spese_categoria = (
-        df[df["type"] == "expense"]
+        df_filtrato[df_filtrato["type"] == "expense"]
         .groupby("category")["amount"]
         .sum()
         .reset_index()
