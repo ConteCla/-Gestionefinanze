@@ -222,7 +222,7 @@ if not df.empty:
     # IMPOSTAZIONI
     # ==========================
 
-    st.subheader("⚙️ Impostazioni")
+   st.subheader("⚙️ Impostazioni")
 
     nuovo_obiettivo = st.number_input(
         "Obiettivo capitale (€)",
@@ -230,21 +230,21 @@ if not df.empty:
         step=1000.0
     )
 
-   if st.button("💾 Salva impostazioni"):
+    if st.button("💾 Salva impostazioni"):
 
-    riga_obiettivo = settings_df.index[
-        settings_df["chiave"] == "obiettivo_capitale"
-    ][0] + 2
+        riga_obiettivo = settings_df.index[
+            settings_df["chiave"] == "obiettivo_capitale"
+        ][0] + 2
 
-    settings_sheet.update_cell(
-        riga_obiettivo,
-        2,
-        nuovo_obiettivo
-    )
+        settings_sheet.update_cell(
+            riga_obiettivo,
+            2,
+            nuovo_obiettivo
+        )
 
-    st.success("Impostazioni salvate")
+        st.success("Impostazioni salvate")
 
-    st.rerun()
+        st.rerun()
 
     entrate = df[df["type"] == "income"]["amount"].sum()
     uscite = df[df["type"] == "expense"]["amount"].sum()
