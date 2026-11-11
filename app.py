@@ -412,6 +412,3 @@ st.plotly_chart(
     use_container_width=True
 )
 
-else:
-
-    st.info("Nessun dato presente.")
