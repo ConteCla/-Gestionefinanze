@@ -423,7 +423,7 @@ df = df.sort_values("date")
 if df.empty:
     st.info("Nessun movimento presente.")
 else:
-df["capital"] = totale_asset - saldo + df["signed_amount"].cumsum()
+    df["capital"] = totale_asset - saldo + df["signed_amount"].cumsum()
 
 # Patrimonio reale
 fig3 = px.line(
