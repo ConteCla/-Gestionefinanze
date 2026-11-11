@@ -211,7 +211,7 @@ with st.expander("➕ Aggiungi movimento"):
 
     nota = st.text_input("Nota")
 
-   if st.button("Salva movimento", key="salva_movimento"):
+if st.button("Salva movimento", key="salva_movimento"):
 
         if categoria == "":
             st.warning("Inserisci una categoria")
