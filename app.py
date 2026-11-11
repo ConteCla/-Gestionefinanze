@@ -44,10 +44,24 @@ patrimonio_sheet = file.worksheet("Patrimonio")
 data = sheet.get_all_records()
 settings_data = settings_sheet.get_all_records()
 
-df = pd.DataFrame(data)
+if data:
+    df = pd.DataFrame(data)
+else:
+    df = pd.DataFrame(
+        columns=[
+            "date",
+            "type",
+            "category",
+            "amount",
+            "note"
+        ]
+    )
+
 settings_df = pd.DataFrame(settings_data)
+
 patrimonio_data = patrimonio_sheet.get_all_records()
 patrimonio_df = pd.DataFrame(patrimonio_data)
+
 totale_asset = patrimonio_df["valore"].sum()
 # ==========================
 # TITLE
