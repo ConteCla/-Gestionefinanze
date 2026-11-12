@@ -11,6 +11,7 @@ from datetime import date
 
 st.set_page_config(
     page_title="Gestione Finanze",
+    page_icon="logo.png",
     layout="wide"
 )
 
