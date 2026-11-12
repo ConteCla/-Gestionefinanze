@@ -327,7 +327,7 @@ if pagina == "Dashboard":
 
         
         
-
+if pagina == "Impostazioni":
     # ==========================
     # IMPOSTAZIONI
     # ==========================
