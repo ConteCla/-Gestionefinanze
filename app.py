@@ -635,107 +635,108 @@ if pagina == "Dashboard":
         fig_analisi,
         use_container_width=True
     )
-# ==========================
-# PATRIMONIO NEL TEMPO + PREVISIONE
-# ==========================
-
-if df.empty:
-
-    st.info("Nessun movimento presente.")
-
-else:
+if pagina == "Dashboard":    
+    # ==========================
+    # PATRIMONIO NEL TEMPO + PREVISIONE
+    # ==========================
     
-    df["date"] = pd.to_datetime(
-        df["date"],
-        errors="coerce"
-    )
-
-    df = df.dropna(subset=["date"])
-
-    df["signed_amount"] = df.apply(
-        lambda row: row["amount"]
-        if row["type"] == "income"
-        else -row["amount"],
-        axis=1
-    )
-
-    df = df.sort_values("date")
-
-    df["capital"] = (
-        totale_asset
-        - saldo
-        + df["signed_amount"].cumsum()
-    )
-
-    fig3 = px.line(
-        df,
-        x="date",
-        y="capital",
-        markers=True,
-        title="📈 Andamento Patrimonio"
-    )
-
-    # ==========================
-    # PREVISIONE
-    # ==========================
-
-    oggi = pd.Timestamp.today()
-
-    mesi_passati = max(
-        1,
-        oggi.month
-    )
-
-    risparmio_medio = saldo / mesi_passati
-
-    ultimo_capitale = df["capital"].iloc[-1]
-
-    date_future = pd.date_range(
-        start=pd.Timestamp(
-            year=oggi.year,
-            month=oggi.month + 1 if oggi.month < 12 else 12,
-            day=1
-        ),
-        end=f"{oggi.year}-12-01",
-        freq="MS"
-    )
-
-    capitale_previsto = ultimo_capitale
-
-    capitali_previsti = []
-
-    for _ in date_future:
-
-        capitale_previsto += risparmio_medio
-
-        capitali_previsti.append(
-            capitale_previsto
+    if df.empty:
+    
+        st.info("Nessun movimento presente.")
+    
+    else:
+        
+        df["date"] = pd.to_datetime(
+            df["date"],
+            errors="coerce"
+        )
+    
+        df = df.dropna(subset=["date"])
+    
+        df["signed_amount"] = df.apply(
+            lambda row: row["amount"]
+            if row["type"] == "income"
+            else -row["amount"],
+            axis=1
+        )
+    
+        df = df.sort_values("date")
+    
+        df["capital"] = (
+            totale_asset
+            - saldo
+            + df["signed_amount"].cumsum()
+        )
+    
+        fig3 = px.line(
+            df,
+            x="date",
+            y="capital",
+            markers=True,
+            title="📈 Andamento Patrimonio"
         )
 
-    if len(date_future) > 0:
-
-        fig3.add_scatter(
-            x=date_future,
-            y=capitali_previsti,
-            mode="lines+markers",
-            name="Previsione",
-            line=dict(
-                color="orange",
-                dash="dash",
-                width=3
+        # ==========================
+        # PREVISIONE
+        # ==========================
+    
+        oggi = pd.Timestamp.today()
+    
+        mesi_passati = max(
+            1,
+            oggi.month
+        )
+    
+        risparmio_medio = saldo / mesi_passati
+    
+        ultimo_capitale = df["capital"].iloc[-1]
+    
+        date_future = pd.date_range(
+            start=pd.Timestamp(
+                year=oggi.year,
+                month=oggi.month + 1 if oggi.month < 12 else 12,
+                day=1
+            ),
+            end=f"{oggi.year}-12-01",
+            freq="MS"
+        )
+    
+        capitale_previsto = ultimo_capitale
+    
+        capitali_previsti = []
+    
+        for _ in date_future:
+    
+            capitale_previsto += risparmio_medio
+    
+            capitali_previsti.append(
+                capitale_previsto
             )
+    
+        if len(date_future) > 0:
+    
+            fig3.add_scatter(
+                x=date_future,
+                y=capitali_previsti,
+                mode="lines+markers",
+                name="Previsione",
+                line=dict(
+                    color="orange",
+                    dash="dash",
+                    width=3
+                )
+            )
+    
+        fig3.update_xaxes(
+            range=[
+                f"{oggi.year}-01-01",
+                f"{oggi.year}-12-31"
+            ],
+            dtick="M1",
+            tickformat="%b"
         )
-
-    fig3.update_xaxes(
-        range=[
-            f"{oggi.year}-01-01",
-            f"{oggi.year}-12-31"
-        ],
-        dtick="M1",
-        tickformat="%b"
-    )
-
-    st.plotly_chart(
-        fig3,
-        use_container_width=True
-    )
+    
+        st.plotly_chart(
+            fig3,
+            use_container_width=True
+        )
