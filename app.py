@@ -301,6 +301,27 @@ if mese_nome != "Tutti":
     df_filtrato = df_filtrato[
         df_filtrato["date"].dt.month == mesi[mese_nome]
     ]
+    # ==========================
+    # CONFRONTO MESE PRECEDENTE
+    # ==========================
+
+    mese_corrente = mesi.get(mese_nome, 0)
+
+    if mese_corrente > 1:
+
+        df_precedente = df[
+            (df["date"].dt.year == anno_selezionato) &
+            (df["date"].dt.month == mese_corrente - 1)
+        ]
+
+        entrate_precedenti = df_precedente[
+            df_precedente["type"] == "income"
+        ]["amount"].sum()
+
+        uscite_precedenti = df_precedente[
+            df_precedente["type"] == "expense"
+        ]["amount"].sum()
+        
     obiettivo_capitale = float(
         settings_df.loc[
             settings_df["chiave"] == "obiettivo_capitale",
