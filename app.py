@@ -321,7 +321,7 @@ if mese_nome != "Tutti":
         uscite_precedenti = df_precedente[
             df_precedente["type"] == "expense"
         ]["amount"].sum()
-            if entrate_precedenti > 0:
+        if entrate_precedenti > 0:
             variazione_entrate = (
                 (entrate - entrate_precedenti)
                 / entrate_precedenti
