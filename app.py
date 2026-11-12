@@ -362,6 +362,39 @@ if pagina == "Impostazioni":
 
         st.rerun()
 if pagina == "Analisi":
+    anni_disponibili = sorted(
+        df["date"].dt.year.dropna().unique(),
+        reverse=True
+    )
+
+    mesi = {
+        "Tutti": 0,
+        "Gennaio": 1,
+        "Febbraio": 2,
+        "Marzo": 3,
+        "Aprile": 4,
+        "Maggio": 5,
+        "Giugno": 6,
+        "Luglio": 7,
+        "Agosto": 8,
+        "Settembre": 9,
+        "Ottobre": 10,
+        "Novembre": 11,
+        "Dicembre": 12
+    }
+
+    anno_selezionato = anni_disponibili[0]
+
+    df_filtrato = df[
+        df["date"].dt.year == anno_selezionato
+    ]
+
+    obiettivo_capitale = float(
+        settings_df.loc[
+            settings_df["chiave"] == "obiettivo_capitale",
+            "valore"
+        ].iloc[0]
+    )
     obiettivo_capitale = float(
         settings_df.loc[
             settings_df["chiave"] == "obiettivo_capitale",
