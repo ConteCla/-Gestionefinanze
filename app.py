@@ -310,6 +310,12 @@ if not df.empty:
     df_filtrato = df[
         df["date"].dt.year == anno_selezionato
     ]
+    obiettivo_capitale = float(
+            settings_df.loc[
+                settings_df["chiave"] == "obiettivo_capitale",
+                "valore"
+            ].iloc[0]
+        )
 
     if mese_nome != "Tutti":
 
@@ -319,12 +325,7 @@ if not df.empty:
     
 
         
-        obiettivo_capitale = float(
-            settings_df.loc[
-                settings_df["chiave"] == "obiettivo_capitale",
-                "valore"
-            ].iloc[0]
-        )
+        
 
     # ==========================
     # IMPOSTAZIONI
