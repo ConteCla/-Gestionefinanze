@@ -257,16 +257,17 @@ if pagina == "Movimenti":
 # ==========================
 # DASHBOARD
 # ==========================
-saldo = 0
+if pagina == "Dashboard":
+    saldo = 0
 
-if not df.empty:
+    if not df.empty:
 
-    df.columns = df.columns.str.lower()
-    df["amount"] = pd.to_numeric(df["amount"])
-    df["date"] = pd.to_datetime(
-    df["date"],
-    errors="coerce"
-)
+        df.columns = df.columns.str.lower()
+        df["amount"] = pd.to_numeric(df["amount"])
+        df["date"] = pd.to_datetime(
+        df["date"],
+        errors="coerce"
+    )
 
 # ==========================
 # FILTRO MESE/ANNO
