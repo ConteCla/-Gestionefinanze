@@ -155,104 +155,105 @@ if pagina == "Patrimonio":
     # ==========================
 # FORM NUOVO MOVIMENTO
 # ==========================
-with st.expander("➕ Aggiungi movimento"):
+if pagina == "Movimenti":
+    with st.expander("➕ Aggiungi movimento"):
 
-    data_movimento = st.date_input(
-        "Data",
-        value=date.today()
-    )
-
-    tipo = st.selectbox(
-        "Tipo",
-        ["income", "expense"]
-    )
-    categorie = [
-        "Stipendio",
-        "Bollette",
-        "Affitto",
-        "Spesa",
-        "Benzina",
-        "Ristorante",
-        "Viaggi",
-        "Investimenti",
-        "Tempo Libero",
-        "Casa",
-        "Sport",
-        "Shopping",
-        "Salute",
-        "Mezzi di trasporto",
-        "Regali",
-        "Macchina",
-        "Bar/merende",
-        "Cellulare",
-        "Barbiere",
-        "Banca",
-        "Puzzone",
-        "Altro (scrivi tu)"
-    ]
-
-    categoria_selezionata = st.selectbox(
-        "Categoria",
-        categorie
-    )
-
-    if categoria_selezionata == "Altro (scrivi tu)":
-        categoria = st.text_input(
-            "Inserisci nuova categoria"
+        data_movimento = st.date_input(
+            "Data",
+            value=date.today()
         )
-    else:
-        categoria = categoria_selezionata
 
-    importo = st.number_input(
-        "Importo",
-        min_value=0.0,
-        step=1.0
-    )
+        tipo = st.selectbox(
+            "Tipo",
+            ["income", "expense"]
+        )
+        categorie = [
+            "Stipendio",
+            "Bollette",
+            "Affitto",
+            "Spesa",
+            "Benzina",
+            "Ristorante",
+            "Viaggi",
+            "Investimenti",
+            "Tempo Libero",
+            "Casa",
+            "Sport",
+            "Shopping",
+            "Salute",
+            "Mezzi di trasporto",
+            "Regali",
+            "Macchina",
+            "Bar/merende",
+            "Cellulare",
+            "Barbiere",
+            "Banca",
+            "Puzzone",
+            "Altro (scrivi tu)"
+        ]
 
-    nota = st.text_input("Nota")
+        categoria_selezionata = st.selectbox(
+            "Categoria",
+            categorie
+        )
 
-    if st.button("Salva movimento", key="salva_movimento"):
-
-        if categoria == "":
-            st.warning("Inserisci una categoria")
-
+        if categoria_selezionata == "Altro (scrivi tu)":
+            categoria = st.text_input(
+                "Inserisci nuova categoria"
+            )
         else:
+            categoria = categoria_selezionata
 
-            nuova_riga = [
-                str(data_movimento),
-                tipo,
-                categoria,
-                importo,
-                nota
-            ]
+        importo = st.number_input(
+            "Importo",
+            min_value=0.0,
+            step=1.0
+        )
 
-            sheet.append_row(nuova_riga)
+        nota = st.text_input("Nota")
 
-            indice_banca = patrimonio_df[
-                patrimonio_df["categoria"] == "Banca"
-            ].index[0]
+        if st.button("Salva movimento", key="salva_movimento"):
 
-            valore_banca = float(
-                patrimonio_df.loc[
-                    indice_banca,
-                    "valore"
-                ]
-            )
+            if categoria == "":
+                st.warning("Inserisci una categoria")
 
-            if tipo == "income":
-                nuovo_valore_banca = valore_banca + importo
             else:
-                nuovo_valore_banca = valore_banca - importo
 
-            patrimonio_sheet.update_cell(
-                indice_banca + 2,
-                2,
-                nuovo_valore_banca
-            )
+                nuova_riga = [
+                    str(data_movimento),
+                    tipo,
+                    categoria,
+                    importo,
+                    nota
+                ]
 
-            st.success("Movimento salvato!")
+                sheet.append_row(nuova_riga)
 
-            st.rerun()
+                indice_banca = patrimonio_df[
+                    patrimonio_df["categoria"] == "Banca"
+                ].index[0]
+
+                valore_banca = float(
+                    patrimonio_df.loc[
+                        indice_banca,
+                        "valore"
+                    ]
+                )
+
+                if tipo == "income":
+                    nuovo_valore_banca = valore_banca + importo
+                else:
+                    nuovo_valore_banca = valore_banca - importo
+
+                patrimonio_sheet.update_cell(
+                    indice_banca + 2,
+                    2,
+                    nuovo_valore_banca
+                )
+
+                st.success("Movimento salvato!")
+
+                st.rerun()
 # ==========================
 # DASHBOARD
 # ==========================
