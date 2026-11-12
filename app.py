@@ -267,7 +267,7 @@ if not df.empty:
     df["date"],
     errors="coerce"
 )
-if pagina == "Analisi"
+if pagina == "Analisi":
 # ==========================
 # FILTRO MESE/ANNO
 # ==========================
