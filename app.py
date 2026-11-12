@@ -361,7 +361,19 @@ if mese_nome != "Tutti":
         tasso_risparmio = (saldo / entrate) * 100
     else:
         tasso_risparmio = 0
+    st.subheader("📊 Analisi del periodo")
 
+    col_a, col_b = st.columns(2)
+
+    col_a.metric(
+    "Risparmio",
+    f"€ {saldo:,.2f}"
+    )
+
+    col_b.metric(
+    "Tasso di risparmio",
+    f"{tasso_risparmio:.1f}%"
+    )
     st.subheader("🎯 Obiettivo")
 
     col5, col6 = st.columns(2)
