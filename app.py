@@ -321,6 +321,24 @@ if mese_nome != "Tutti":
         uscite_precedenti = df_precedente[
             df_precedente["type"] == "expense"
         ]["amount"].sum()
+            if entrate_precedenti > 0:
+            variazione_entrate = (
+                (entrate - entrate_precedenti)
+                / entrate_precedenti
+                * 100
+            )
+        else:
+            variazione_entrate = 0
+
+        if uscite_precedenti > 0:
+            variazione_uscite = (
+                (uscite - uscite_precedenti)
+                / uscite_precedenti
+                * 100
+            )
+        else:
+            variazione_uscite = 0
+
         
     obiettivo_capitale = float(
         settings_df.loc[
@@ -418,6 +436,21 @@ if mese_nome != "Tutti":
         st.error(
             f"🚨 Risparmio basso: {tasso_risparmio:.1f}%."
         )
+        if mese_corrente > 1:
+
+            st.subheader("📈 Confronto col mese precedente")
+
+            c_prev1, c_prev2 = st.columns(2)
+
+            c_prev1.metric(
+                "Entrate",
+                f"{variazione_entrate:.1f}%"
+            )
+
+            c_prev2.metric(
+                "Uscite",
+                f"{variazione_uscite:.1f}%"
+            )
     st.subheader("🎯 Obiettivo")
 
     col5, col6 = st.columns(2)
