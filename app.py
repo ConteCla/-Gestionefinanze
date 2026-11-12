@@ -357,6 +357,10 @@ if mese_nome != "Tutti":
     col2.metric("Uscite", f"€ {uscite:,.2f}")
     col3.metric("Saldo", f"€ {saldo:,.2f}")
     col4.metric("Patrimonio", f"€ {patrimonio_attuale:,.2f}")
+    if entrate > 0:
+    tasso_risparmio = (saldo / entrate) * 100
+else:
+    tasso_risparmio = 0
 
     st.subheader("🎯 Obiettivo")
 
