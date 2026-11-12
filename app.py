@@ -362,6 +362,10 @@ if pagina == "Impostazioni":
 
         st.rerun()
 if pagina == "Analisi":
+    df["date"] = pd.to_datetime(
+        df["date"],
+        errors="coerce"
+    )
     anni_disponibili = sorted(
         df["date"].dt.year.dropna().unique(),
         reverse=True
