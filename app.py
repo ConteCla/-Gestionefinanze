@@ -361,7 +361,13 @@ if pagina == "Impostazioni":
         st.success("Impostazioni salvate")
 
         st.rerun()
-
+if pagina == "Analisi":
+    obiettivo_capitale = float(
+        settings_df.loc[
+            settings_df["chiave"] == "obiettivo_capitale",
+            "valore"
+        ].iloc[0]
+    )
     entrate = df_filtrato[
     df_filtrato["type"] == "income"]["amount"].sum()
 
