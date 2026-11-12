@@ -69,6 +69,18 @@ totale_asset = patrimonio_df["valore"].sum()
 # ==========================
 
 st.title("💰 Gestione Finanze")
+st.sidebar.title("📂 Menu")
+
+pagina = st.sidebar.radio(
+    "Vai a",
+    [
+        "Dashboard",
+        "Movimenti",
+        "Patrimonio",
+        "Analisi",
+        "Impostazioni"
+    ]
+)
 st.subheader("🏦 Allocazione Patrimonio")
 
 
