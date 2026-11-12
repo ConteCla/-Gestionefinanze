@@ -57,7 +57,7 @@ else:
             "note"
         ]
     )
-
+df.columns = df.columns.str.lower()
 settings_df = pd.DataFrame(settings_data)
 
 patrimonio_data = patrimonio_sheet.get_all_records()
@@ -644,7 +644,7 @@ if df.empty:
     st.info("Nessun movimento presente.")
 
 else:
-    st.write(list(df.columns))
+    
     df["date"] = pd.to_datetime(
         df["date"],
         errors="coerce"
