@@ -644,7 +644,7 @@ if df.empty:
     st.info("Nessun movimento presente.")
 
 else:
-    st.write(df.columns)
+    st.write(list(df.columns))
     df["date"] = pd.to_datetime(
         df["date"],
         errors="coerce"
