@@ -445,11 +445,13 @@ if mese_nome != "Tutti":
 
             c_prev1.metric(
                 "Entrate",
+                f"€ {entrate:,.0f}",
                 f"{variazione_entrate:.1f}%"
             )
 
             c_prev2.metric(
                 "Uscite",
+                f"€ {uscite:,.0f}",
                 f"{variazione_uscite:.1f}%"
             )
     st.subheader("🎯 Obiettivo")
