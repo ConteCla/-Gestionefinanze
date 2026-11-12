@@ -386,6 +386,7 @@ if pagina == "Analisi":
         "Novembre": 11,
         "Dicembre": 12
     }
+     mese_nome = "Tutti"
 
     anno_selezionato = anni_disponibili[0]
 
