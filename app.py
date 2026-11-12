@@ -81,76 +81,77 @@ pagina = st.sidebar.radio(
         "Impostazioni"
     ]
 )
-st.subheader("🏦 Allocazione Patrimonio")
+if pagina == "Patrimonio":
+    st.subheader("🏦 Allocazione Patrimonio")
 
 
-col1, col2 = st.columns([1, 2])
+    col1, col2 = st.columns([1, 2])
 
-with col1:
+    with col1:
 
-    st.metric(
-        "Patrimonio",
-        f"€ {totale_asset:,.0f}"
-    )
-
-    for _, riga in patrimonio_df.iterrows():
-
-        percentuale = (
-            riga["valore"] / totale_asset * 100
-            if totale_asset > 0
-            else 0
+        st.metric(
+            "Patrimonio",
+            f"€ {totale_asset:,.0f}"
         )
 
-        st.write(
-            f"**{riga['categoria']}** "
-            f"€ {riga['valore']:,.0f} "
-            f"({percentuale:.1f}%)"
+        for _, riga in patrimonio_df.iterrows():
+
+            percentuale = (
+                riga["valore"] / totale_asset * 100
+                if totale_asset > 0
+                else 0
+            )
+
+            st.write(
+                f"**{riga['categoria']}** "
+                f"€ {riga['valore']:,.0f} "
+                f"({percentuale:.1f}%)"
+            )
+ 
+    with col2:
+
+        fig_asset = px.pie(
+            patrimonio_df,
+            names="categoria",
+            values="valore",
+            title="Ripartizione Patrimonio"
         )
 
-with col2:
+        st.plotly_chart(
+            fig_asset,
+            use_container_width=True
+        )
+    st.subheader("✏️ Aggiorna Asset")
 
-    fig_asset = px.pie(
-        patrimonio_df,
-        names="categoria",
-        values="valore",
-        title="Ripartizione Patrimonio"
+    asset_scelto = st.selectbox(
+        "Categoria",
+        patrimonio_df["categoria"]
     )
 
-    st.plotly_chart(
-        fig_asset,
-        use_container_width=True
-    )
-st.subheader("✏️ Aggiorna Asset")
-
-asset_scelto = st.selectbox(
-    "Categoria",
-    patrimonio_df["categoria"]
-)
-
-valore_asset = st.number_input(
-    "Nuovo valore",
-    min_value=0.0,
-    step=100.0
-)
-
-if st.button(
-    "Salva Asset",
-    key="salva_asset"
-):
-
-    indice = patrimonio_df[
-        patrimonio_df["categoria"] == asset_scelto
-    ].index[0]
-
-    patrimonio_sheet.update_cell(
-        indice + 2,
-        2,
-        valore_asset
+    valore_asset = st.number_input(
+        "Nuovo valore",
+        min_value=0.0,
+        step=100.0
     )
 
-    st.success("Asset aggiornato")
+    if st.button(
+        "Salva Asset",
+        key="salva_asset"
+    ):
 
-    st.rerun()
+        indice = patrimonio_df[
+            patrimonio_df["categoria"] == asset_scelto
+        ].index[0]
+
+        patrimonio_sheet.update_cell(
+            indice + 2,
+            2,
+            valore_asset
+        )
+
+        st.success("Asset aggiornato")
+
+        st.rerun()
     # ==========================
 # FORM NUOVO MOVIMENTO
 # ==========================
