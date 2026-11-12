@@ -534,43 +534,7 @@ if pagina == "Analisi":
         "Mancano",
         f"€ {mancante:,.2f}"
     )
-    if pagina == "Movimenti":
-        st.subheader("📋 Movimenti")
-
-        st.dataframe(
-        df_filtrato,
-        use_container_width=True
-    )
-
-    # ==========================
-    # ELIMINA MOVIMENTO
-    # ==========================
-
-        st.subheader("🗑️ Elimina movimento")
-
-        movimento_da_eliminare = st.selectbox(
-            "Seleziona il movimento",
-            df.index,
-            format_func=lambda i: (
-                f"{df.loc[i, 'date']} | "
-                f"{df.loc[i, 'category']} | "
-                f"€ {df.loc[i, 'amount']}"
-            )
-        )
-
-        conferma = st.checkbox(
-            "Confermo di voler eliminare il movimento"
-        )
-
-        if conferma and st.button("🗑️ Elimina selezionato"):
-
-            numero_riga_sheet = movimento_da_eliminare + 2
-
-            sheet.delete_rows(numero_riga_sheet)
-
-            st.success("Movimento eliminato!")
-
-            st.rerun()
+    
 
     # ==========================
     # ENTRATE VS USCITE
