@@ -376,27 +376,27 @@ if mese_nome != "Tutti":
     )
     if tasso_risparmio >= 30:
 
-    st.success(
-        f"🔥 Eccellente! Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
-    )
+        st.success(
+            f"🔥 Eccellente! Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
+        )
 
     elif tasso_risparmio >= 20:
 
-    st.success(
-        f"✅ Ottimo! Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
-    )
+        st.success(
+            f"✅ Ottimo! Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
+        )
 
     elif tasso_risparmio >= 10:
 
-    st.warning(
-        f"⚠️ Discreto. Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
-    )
+        st.warning(
+            f"⚠️ Discreto. Stai risparmiando il {tasso_risparmio:.1f}% delle entrate."
+        )
 
     else:
 
-    st.error(
-        f"🚨 Risparmio basso: {tasso_risparmio:.1f}%."
-    )
+        st.error(
+            f"🚨 Risparmio basso: {tasso_risparmio:.1f}%."
+        )
     st.subheader("🎯 Obiettivo")
 
     col5, col6 = st.columns(2)
