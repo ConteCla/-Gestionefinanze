@@ -267,64 +267,64 @@ if not df.empty:
     df["date"],
     errors="coerce"
 )
-
+if pagina == "Analisi"
 # ==========================
 # FILTRO MESE/ANNO
 # ==========================
 
-st.subheader("📅 Filtro")
+    st.subheader("📅 Filtro")
 
-col_f1, col_f2 = st.columns(2)
+    col_f1, col_f2 = st.columns(2)
 
-anni_disponibili = sorted(
-    df["date"].dt.year.dropna().unique(),
-    reverse=True
-)
+    anni_disponibili = sorted(
+        df["date"].dt.year.dropna().unique(),
+        reverse=True
+    )
 
-mesi = {
-    "Tutti": 0,
-    "Gennaio": 1,
-    "Febbraio": 2,
-    "Marzo": 3,
-    "Aprile": 4,
-    "Maggio": 5,
-    "Giugno": 6,
-    "Luglio": 7,
-    "Agosto": 8,
-    "Settembre": 9,
-    "Ottobre": 10,
-    "Novembre": 11,
-    "Dicembre": 12
-}
+    mesi = {
+        "Tutti": 0,
+        "Gennaio": 1,
+        "Febbraio": 2,
+        "Marzo": 3,
+        "Aprile": 4,
+        "Maggio": 5,
+        "Giugno": 6,
+        "Luglio": 7,
+        "Agosto": 8,
+        "Settembre": 9,
+        "Ottobre": 10,
+        "Novembre": 11,
+        "Dicembre": 12
+    }
 
-anno_selezionato = col_f2.selectbox(
-    "Anno",
-    anni_disponibili
-)
+    anno_selezionato = col_f2.selectbox(
+        "Anno",
+        anni_disponibili
+    )
 
-mese_nome = col_f1.selectbox(
-    "Mese",
-    list(mesi.keys())
-)
+    mese_nome = col_f1.selectbox(
+        "Mese",
+        list(mesi.keys())
+    )
 
-df_filtrato = df[
-    df["date"].dt.year == anno_selezionato
-]
-
-if mese_nome != "Tutti":
-
-    df_filtrato = df_filtrato[
-        df_filtrato["date"].dt.month == mesi[mese_nome]
+    df_filtrato = df[
+        df["date"].dt.year == anno_selezionato
     ]
+
+    if mese_nome != "Tutti":
+
+        df_filtrato = df_filtrato[
+            df_filtrato["date"].dt.month == mesi[mese_nome]
+        ]
     
 
         
-    obiettivo_capitale = float(
-        settings_df.loc[
-            settings_df["chiave"] == "obiettivo_capitale",
-            "valore"
-        ].iloc[0]
-    )
+        obiettivo_capitale = float(
+            settings_df.loc[
+                settings_df["chiave"] == "obiettivo_capitale",
+                "valore"
+            ].iloc[0]
+        )
 
     # ==========================
     # IMPOSTAZIONI
